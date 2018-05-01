@@ -30,9 +30,9 @@ local h2o(config) = {
     // Number 
     replicas:: 3,
 
-    //
+    // Construct list of node-names
     nodes:: std.join(",", std.makeArray(self.replicas,
-					function(x) "h2o-%03d.h2o" % x)),
+					function(x) "h2o-%03d.h2o:54321" % x)),
 
     // Ports used by master/main name node.
     ports:: [

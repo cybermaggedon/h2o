@@ -21,23 +21,21 @@ local svcLabels = svc.mixin.metadata.labels;
 
 local h2o(config) = {
 
-//     local version = import "version.jsonnet",
+    name:: "h2o",
+    version:: import "version.jsonnet",
+    images:: ["docker.io/cybermaggedon/h2o:" + self.version],
 
-    name: "h2o",
-    version: "3.18.0.8",
-    images: ["docker.io/cybermaggedon/h2o:" + self.version],
+    replicas:: 3,
 
-    replicas: 3,
-
-    nodes: std.join(",", std.makeArray(count, function(x) "h2o-%03d.h2o" % x)),
+    nodes:: std.join(",", std.makeArray(count, function(x) "h2o-%03d.h2o" % x)),
 
     // Ports used by master/main name node.
-    ports: [
+    ports:: [
         containerPort.newNamed("http", 54321)
     ],
 
     // Environment variables
-    envs: [
+    envs:: [
 	// Set memory
         env.new("H2O_MEMORY", "1g"),
         env.new("H2O_NODES", self.nodes)

@@ -80,7 +80,7 @@ local h2o(config) = {
 
     services:: [
         // Headless service
-        svc.new("h2o", {app: "h2o"}, servicePorts) +
+        svc.new("h2o", {app: "h2o"}, self.svcPorts) +
             svcLabels({app: "h2o", component: "ml"}) +
             svc.mixin.spec.clusterIp("None")
     ],

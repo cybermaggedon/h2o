@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Comma-separated list of cluster nodes form host:port,host2:port2
+H2O_NODES=${H2O_NODES:-localhost:54321}
+
+# Java memory to allocate, default 1g.
+H2O_MEMORY=${H2O_MEMORY:-1g}
+
+# Construct cluster nodes file.
+(
+  for v in $(echo ${H2O_NODES} | tr ',' ' ')
+  do
+    echo $v
+  done
+) > /nodes.cfg
+
+# Run H2O
+java -Xmx${H2O_MEMORY} -jar h2o.jar -flatfile /nodes.cfg -port 54321
+

@@ -1,0 +1,88 @@
+{
+   "apiVersion": "v1",
+   "items": [
+      {
+         "apiVersion": "apps/v1beta1",
+         "kind": "StatefulSet",
+         "metadata": {
+            "name": "h2o"
+         },
+         "spec": {
+            "podManagementPolicy": "Parallel",
+            "replicas": 3,
+            "serviceName": "h2o",
+            "template": {
+               "metadata": {
+                  "labels": {
+                     "app": "h2o",
+                     "component": "ml"
+                  }
+               },
+               "spec": {
+                  "containers": [
+                     {
+                        "env": [
+                           {
+                              "name": "H2O_MEMORY",
+                              "value": "1g"
+                           },
+                           {
+                              "name": "H2O_NODES",
+                              "value": "h2o-0.h2o:54321,h2o-1.h2o:54321,h2o-2.h2o:54321"
+                           }
+                        ],
+                        "image": "docker.io/cybermaggedon/h2o:3.18.0.8",
+                        "name": "h2o",
+                        "ports": [
+                           {
+                              "containerPort": 54321,
+                              "name": "http"
+                           }
+                        ],
+                        "resources": {
+                           "limits": {
+                              "cpu": "1",
+                              "memory": "1.2G"
+                           },
+                           "requests": {
+                              "cpu": "0.5",
+                              "memory": "1.2G"
+                           }
+                        }
+                     }
+                  ]
+               }
+            },
+            "updateStrategy": {
+               "type": "RollingUpdate"
+            }
+         }
+      },
+      {
+         "apiVersion": "v1",
+         "kind": "Service",
+         "metadata": {
+            "labels": {
+               "app": "h2o",
+               "component": "ml"
+            },
+            "name": "h2o"
+         },
+         "spec": {
+            "clusterIP": "None",
+            "ports": [
+               {
+                  "name": "http",
+                  "port": 54321,
+                  "protocol": "TCP",
+                  "targetPort": 54321
+               }
+            ],
+            "selector": {
+               "app": "h2o"
+            }
+         }
+      }
+   ],
+   "kind": "List"
+}

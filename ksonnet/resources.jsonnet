@@ -18,6 +18,8 @@ local gceDisk = volume.mixin.gcePersistentDisk;
 local svc = k.core.v1.service;
 local svcPort = svc.mixin.spec.portsType;
 local svcLabels = svc.mixin.metadata.labels;
+local sSet = k.apps.v1beta1.statefulSet;
+local sSetSpec = k.apps.v1beta1.statefulSetSpec;
 
 local h2o(config) = {
 
@@ -25,9 +27,12 @@ local h2o(config) = {
     version:: import "version.jsonnet",
     images:: ["docker.io/cybermaggedon/h2o:" + self.version],
 
+    // Number 
     replicas:: 3,
 
-    nodes:: std.join(",", std.makeArray(count, function(x) "h2o-%03d.h2o" % x)),
+    //
+    nodes:: std.join(",", std.makeArray(self.replicas,
+					function(x) "h2o-%03d.h2o" % x)),
 
     // Ports used by master/main name node.
     ports:: [

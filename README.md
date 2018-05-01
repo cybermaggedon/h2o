@@ -32,3 +32,6 @@ Environment variables:
 - ```H2O_MEMORY```, memory spec used for a Java ```-Xmx``` parameter.
 - ```H2O_NODES```, list of cluster nodes, comma-separate host:port list.
 
+See: https://github.com/cybermaggedon/h2o
+Kubernetes example at: https://github.com/cybermaggedon/h2o/blob/master/kubernetes-example.json
+

@@ -14,8 +14,10 @@ container: ${H2O}
 	  -t docker.io/cybermaggedon/h2o:${VERSION} \
 	  -f Dockerfile .
 
-version:
+version: FORCE
 	@echo ${VERSION}
+
+FORCE:
 
 push:
 	gcloud docker -- push \

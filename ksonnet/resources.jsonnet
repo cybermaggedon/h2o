@@ -32,7 +32,7 @@ local h2o(config) = {
 
     // Construct list of node-names
     nodes:: std.join(",", std.makeArray(self.replicas,
-					function(x) "h2o-%03d.h2o:54321" % x)),
+					function(x) "h2o-%d.h2o:54321" % x)),
 
     // Ports used by master/main name node.
     ports:: [
@@ -79,8 +79,10 @@ local h2o(config) = {
     ],
 
     services:: [
-        svc.new("h2o", {app: "h2o"}, self.svcPorts) +
-            svcLabels({app: "h2o", component: "ml"})
+        // Headless service
+        svc.new("h2o", {app: "h2o"}, servicePorts) +
+            svcLabels({app: "h2o", component: "ml"}) +
+            svc.mixin.spec.clusterIp("None")
     ],
 
     resources:

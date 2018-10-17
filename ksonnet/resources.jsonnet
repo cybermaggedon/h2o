@@ -26,6 +26,7 @@ local h2o(config) = {
     name:: "h2o",
     version:: import "version.jsonnet",
     images:: ["docker.io/cybermaggedon/h2o:" + self.version],
+    namespace:: config.namespace,
 
     // Number 
     replicas:: 3,
@@ -64,6 +65,7 @@ local h2o(config) = {
 	local spec = sSet.mixin.spec;
 	sSet.new() +
 	    sSet.mixin.metadata.name("h2o") +
+	    sSet.mixin.metadata.namespace(self.namespace) +
 	    spec.template.metadata.labels({app: "h2o",
 					   component: "ml"}) +
 	    spec.replicas(self.replicas) +
@@ -82,7 +84,8 @@ local h2o(config) = {
         // Headless service
         svc.new("h2o", {app: "h2o"}, self.svcPorts) +
             svcLabels({app: "h2o", component: "ml"}) +
-            svc.mixin.spec.clusterIp("None")
+            svc.mixin.spec.clusterIp("None") +
+            svc.mixin.metadata.namespace(self.namespace)
     ],
 
     resources:
